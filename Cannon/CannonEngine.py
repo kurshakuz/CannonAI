@@ -1,7 +1,6 @@
 from functools import total_ordering
 import uuid
 
-
 class GameState():
     def __init__(self):
         self.board = [
@@ -209,118 +208,6 @@ class GameState():
         playerSoldier = player + 'S'
         opponentSoldier = opponent + 'S'
 
-        if self.redToMove: 
-            if r < 9:
-                # move forward
-                if self.board[r+1][c] == empty:
-                    moves.append(Move((r, c), (r+1, c), self.board, moveType=0))
-                # capture forward
-                if self.board[r+1][c][0] == opponent:
-                    moves.append(Move((r, c), (r+1, c), self.board, moveType=3))
-
-                if c > 0:
-                    # move forward left
-                    if self.board[r+1][c-1] == empty:
-                        moves.append(Move((r, c), (r+1, c-1), self.board, moveType=0))
-                    # capture forward left
-                    if self.board[r+1][c-1][0] == opponent:
-                        moves.append(Move((r, c), (r+1, c-1), self.board, moveType=3))
-
-                if c < 9:
-                    # move forward right
-                    if self.board[r+1][c+1] == empty:
-                        moves.append(Move((r, c), (r+1, c+1), self.board, moveType=0))
-                    # capture forward right
-                    if self.board[r+1][c+1][0] == opponent:
-                        moves.append(Move((r, c), (r+1, c+1), self.board, moveType=3))
-
-            if c > 0:
-                # capture left
-                if self.board[r][c-1][0] == opponent:
-                    moves.append(Move((r, c), (r, c-1), self.board, moveType=3))
-            
-            if c < 9:
-                # capture right
-                if self.board[r][c+1][0] == opponent:
-                    moves.append(Move((r, c), (r, c+1), self.board, moveType=3))
-
-            canRetreat  = False
-            for i in range(-1, 2):
-                for j in range(-1, 2):
-                    if r+i >= 0 and c+j >= 0 and r+i <= 9 and c+j <= 9:
-                        if self.board[r+i][c+j] == opponentSoldier:
-                            canRetreat = True
-                            # print(f'can retreat {(r,c)}')
-
-            if canRetreat and r > 1:
-                if self.board[r-2][c] == empty and self.board[r-1][c] == empty:
-                    # print(f'can retreat to {(r-2, c)}')
-                    moves.append(Move((r, c), (r-2, c), self.board, moveType=1))
-
-                if c > 1 and self.board[r-2][c-2] == empty and self.board[r-1][c-1] == empty:
-                    # print(f'can retreat to {(r-2, c-2)}')
-                    moves.append(Move((r, c), (r-2, c-2), self.board, moveType=1))
-
-                if c < 8 and self.board[r-2][c+2] == empty and self.board[r-1][c+1] == empty:
-                    # print(f'can retreat to {(r-2, c+2)}')
-                    moves.append(Move((r, c), (r-2, c+2), self.board, moveType=1))
-
-        elif not self.redToMove:
-            if  r > 0:
-                # move forward
-                if self.board[r-1][c] == empty:
-                    moves.append(Move((r, c), (r-1, c), self.board, moveType=0))
-                # capture forward
-                if self.board[r-1][c][0] == opponent:
-                    moves.append(Move((r, c), (r-1, c), self.board, moveType=3))
-
-                if c > 0:
-                    # move forward left
-                    if self.board[r-1][c-1] == empty:
-                        moves.append(Move((r, c), (r-1, c-1), self.board, moveType=0))
-                    # capture forward left
-                    if self.board[r-1][c-1][0] == opponent:
-                        moves.append(Move((r, c), (r-1, c-1), self.board, moveType=3))
-
-                if c < 9:
-                    # move forward right
-                    if self.board[r-1][c+1] == empty:
-                        moves.append(Move((r, c), (r-1, c+1), self.board, moveType=0))
-                    # capture forward right
-                    if self.board[r-1][c+1][0] == opponent:
-                        moves.append(Move((r, c), (r-1, c+1), self.board, moveType=3))
-
-            if c > 0:
-                # capture left
-                if self.board[r][c-1][0] == opponent:
-                    moves.append(Move((r, c), (r, c-1), self.board, moveType=3))
-
-            if c < 9:
-                # capture right
-                if self.board[r][c+1][0] == opponent:
-                    moves.append(Move((r, c), (r, c+1), self.board, moveType=3))
-
-            canRetreat  = False
-            for i in range(-1, 2):
-                for j in range(-1, 2):
-                    if r+i >= 0 and c+j >= 0 and r+i <= 9 and c+j <= 9:
-                        if self.board[r+i][c+j] == opponentSoldier:
-                            canRetreat = True
-                            # print(f'can retreat {(r,c)}')
-
-            if canRetreat and r < 8:
-                if self.board[r+2][c] == empty and self.board[r+1][c] == empty:
-                    # print(f'can retreat to {(r+2, c)}')
-                    moves.append(Move((r, c), (r+2, c), self.board, moveType=1))
-
-                if c > 1 and self.board[r+2][c-2] == empty and self.board[r+1][c-1] == empty:
-                    # print(f'can retreat to {(r+2, c-2)}')
-                    moves.append(Move((r, c), (r+2, c-2), self.board, moveType=1))
-
-                if c < 8 and self.board[r+2][c+2] == empty and self.board[r+1][c+1] == empty:
-                    # print(f'can retreat to {(r+2, c+2)}')
-                    moves.append(Move((r, c), (r+2, c+2), self.board, moveType=1))
-
         # cannon moves and shoots
         # horizontal
         if c > 0 and c < 9:
@@ -400,6 +287,118 @@ class GameState():
 
                     elif r > 3 and c < 6 and self.board[r-3][c+3] == empty and self.board[r-4][c+4][0] == opponent:
                         moves.append(Move((r, c), (r-4, c+4), self.board, moveType=4))
+
+        if self.redToMove:
+            canRetreat  = False
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if r+i >= 0 and c+j >= 0 and r+i <= 9 and c+j <= 9:
+                        if self.board[r+i][c+j] == opponentSoldier:
+                            canRetreat = True
+                            # print(f'can retreat {(r,c)}')
+
+            if canRetreat and r > 1:
+                if self.board[r-2][c] == empty and self.board[r-1][c] == empty:
+                    # print(f'can retreat to {(r-2, c)}')
+                    moves.append(Move((r, c), (r-2, c), self.board, moveType=1))
+
+                if c > 1 and self.board[r-2][c-2] == empty and self.board[r-1][c-1] == empty:
+                    # print(f'can retreat to {(r-2, c-2)}')
+                    moves.append(Move((r, c), (r-2, c-2), self.board, moveType=1))
+
+                if c < 8 and self.board[r-2][c+2] == empty and self.board[r-1][c+1] == empty:
+                    # print(f'can retreat to {(r-2, c+2)}')
+                    moves.append(Move((r, c), (r-2, c+2), self.board, moveType=1))
+
+            if r < 9:
+                # move forward
+                if self.board[r+1][c] == empty:
+                    moves.append(Move((r, c), (r+1, c), self.board, moveType=0))
+                # capture forward
+                if self.board[r+1][c][0] == opponent:
+                    moves.append(Move((r, c), (r+1, c), self.board, moveType=3))
+
+                if c > 0:
+                    # move forward left
+                    if self.board[r+1][c-1] == empty:
+                        moves.append(Move((r, c), (r+1, c-1), self.board, moveType=0))
+                    # capture forward left
+                    if self.board[r+1][c-1][0] == opponent:
+                        moves.append(Move((r, c), (r+1, c-1), self.board, moveType=3))
+
+                if c < 9:
+                    # move forward right
+                    if self.board[r+1][c+1] == empty:
+                        moves.append(Move((r, c), (r+1, c+1), self.board, moveType=0))
+                    # capture forward right
+                    if self.board[r+1][c+1][0] == opponent:
+                        moves.append(Move((r, c), (r+1, c+1), self.board, moveType=3))
+
+            if c > 0:
+                # capture left
+                if self.board[r][c-1][0] == opponent:
+                    moves.append(Move((r, c), (r, c-1), self.board, moveType=3))
+            
+            if c < 9:
+                # capture right
+                if self.board[r][c+1][0] == opponent:
+                    moves.append(Move((r, c), (r, c+1), self.board, moveType=3))
+
+        elif not self.redToMove:
+            canRetreat  = False
+            for i in range(-1, 2):
+                for j in range(-1, 2):
+                    if r+i >= 0 and c+j >= 0 and r+i <= 9 and c+j <= 9:
+                        if self.board[r+i][c+j] == opponentSoldier:
+                            canRetreat = True
+                            # print(f'can retreat {(r,c)}')
+
+            if canRetreat and r < 8:
+                if self.board[r+2][c] == empty and self.board[r+1][c] == empty:
+                    # print(f'can retreat to {(r+2, c)}')
+                    moves.append(Move((r, c), (r+2, c), self.board, moveType=1))
+
+                if c > 1 and self.board[r+2][c-2] == empty and self.board[r+1][c-1] == empty:
+                    # print(f'can retreat to {(r+2, c-2)}')
+                    moves.append(Move((r, c), (r+2, c-2), self.board, moveType=1))
+
+                if c < 8 and self.board[r+2][c+2] == empty and self.board[r+1][c+1] == empty:
+                    # print(f'can retreat to {(r+2, c+2)}')
+                    moves.append(Move((r, c), (r+2, c+2), self.board, moveType=1))
+
+            if  r > 0:
+                # move forward
+                if self.board[r-1][c] == empty:
+                    moves.append(Move((r, c), (r-1, c), self.board, moveType=0))
+                # capture forward
+                if self.board[r-1][c][0] == opponent:
+                    moves.append(Move((r, c), (r-1, c), self.board, moveType=3))
+
+                if c > 0:
+                    # move forward left
+                    if self.board[r-1][c-1] == empty:
+                        moves.append(Move((r, c), (r-1, c-1), self.board, moveType=0))
+                    # capture forward left
+                    if self.board[r-1][c-1][0] == opponent:
+                        moves.append(Move((r, c), (r-1, c-1), self.board, moveType=3))
+
+                if c < 9:
+                    # move forward right
+                    if self.board[r-1][c+1] == empty:
+                        moves.append(Move((r, c), (r-1, c+1), self.board, moveType=0))
+                    # capture forward right
+                    if self.board[r-1][c+1][0] == opponent:
+                        moves.append(Move((r, c), (r-1, c+1), self.board, moveType=3))
+
+            if c > 0:
+                # capture left
+                if self.board[r][c-1][0] == opponent:
+                    moves.append(Move((r, c), (r, c-1), self.board, moveType=3))
+
+            if c < 9:
+                # capture right
+                if self.board[r][c+1][0] == opponent:
+                    moves.append(Move((r, c), (r, c+1), self.board, moveType=3))
 
 # movetypes = 
 # 0: move
