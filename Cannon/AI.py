@@ -1,11 +1,12 @@
 from multiprocessing.context import DefaultContext
 import random
 from collections import defaultdict
+import time
 
 soldierCost = 1
 townCost = 100
 noPossibleMove = 0
-maxDepth = 2
+maxDepth = 5
 
 def findRandomMove(possibleMoves):
     return possibleMoves[random.randint(0, len(possibleMoves)-1)]
@@ -59,6 +60,12 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
     if  d == 0:
         return countBoardValue(gs)
 
+    if len(possibleMoves) == 0:
+        if redToMove:
+            return -townCost*10
+        else:
+            return townCost*10
+
     if redToMove:
         maxScore = -townCost
         for move in possibleMoves:
@@ -69,6 +76,7 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
                 maxScore = score
                 if d == maxDepth:
                     nextMove[0] = move
+                    print(move, score)
             gs.undoMove()
             alpha = max(alpha, maxScore)
             if beta <= alpha:
@@ -85,6 +93,7 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
                 minScore = score
                 if d == maxDepth:
                     nextMove[0] = move
+                    print(move, score)
             gs.undoMove()
             beta = min(beta, minScore)
             if beta <= alpha:
