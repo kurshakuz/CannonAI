@@ -5,19 +5,19 @@ from collections import defaultdict
 soldierCost = 1
 townCost = 100
 noPossibleMove = 0
-maxDepth = 4
+maxDepth = 2
 
 def findRandomMove(possibleMoves):
     return possibleMoves[random.randint(0, len(possibleMoves)-1)]
 
-def findBestMove(gs, possibleMoves):
+def findBestMoveMiniMax(gs, possibleMoves):
     nextMove = [None]
     # random.shuffle(possibleMoves)
     possibleMoves.sort()
-    findBestMoveHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove)
+    findBestMoveMiniMaxHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove)
     return nextMove[0]
 
-def findBestMoveHelper(gs, possibleMoves, d, redToMove, nextMove):
+def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
     if  d == 0:
         return countBoardValue(gs)
 
@@ -26,7 +26,7 @@ def findBestMoveHelper(gs, possibleMoves, d, redToMove, nextMove):
         for move in possibleMoves:
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
-            score = findBestMoveHelper(gs, nextMoves, d - 1, False, nextMove)
+            score = findBestMoveMiniMaxHelper(gs, nextMoves, d - 1, False, nextMove)
             if score > maxScore:
                 maxScore = score
                 if d == maxDepth:
@@ -38,7 +38,7 @@ def findBestMoveHelper(gs, possibleMoves, d, redToMove, nextMove):
         for move in possibleMoves:
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
-            score = findBestMoveHelper(gs, nextMoves, d - 1, True, nextMove)
+            score = findBestMoveMiniMaxHelper(gs, nextMoves, d - 1, True, nextMove)
             if score < minScore:
                 minScore = score
                 if d == maxDepth:
