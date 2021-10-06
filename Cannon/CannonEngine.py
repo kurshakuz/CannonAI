@@ -443,9 +443,11 @@ class Move():
         else:
             return False
 
+    # The strongest moves are highest numbers
+    # sort to give strongest first
     def __lt__(self, other):
         if isinstance(other, Move):
-            return self.moveType < other.moveType
+            return self.moveType > other.moveType
         else:
             return False
 

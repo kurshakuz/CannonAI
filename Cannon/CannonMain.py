@@ -112,9 +112,10 @@ def main():
         if not personTurn and not gs.noMoveLeft:
             # AIMove = AI.findRandomMove(possibleMoves)
             # AIMove = AI.findBestMoveMiniMax(gs, possibleMoves)
-            AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
+            # AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
+            # AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMax(gs, possibleMoves)
-            # AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
+            AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxABTT(gs, possibleMoves)
             if AIMove == None:
                 print("AIMove NONE")
