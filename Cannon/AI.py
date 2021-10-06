@@ -113,16 +113,24 @@ def findBestMoveNegaMaxABTT(gs, possibleMoves):
     return nextMove[0]
 
 def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMultiplier, nextMove, transpositionTable):
-    if  d == 0:
-        return redToMoveMultiplier * countBoardValue(gs)
-
     tableSize = 400
     if transpositionTable[gs.zobristKey % tableSize] != []:
         # print(transpositionTable[gs.zobristKey % tableSize])
         TTResult = transpositionTable[gs.zobristKey % tableSize]
-        if d == TTResult[0] and redToMoveMultiplier != TTResult[2]:
-            nextMove[0] = TTResult[3]
-            return TTResult[1]
+        # lowerbound
+        if TTResult[4] is not None and TTResult[4] >= beta:
+            return TTResult[4]
+        # upperbound
+        if TTResult[5] is not None and TTResult[5] >= beta:
+            return TTResult[5]
+
+        if TTResult[4] is not None:
+            alpha = max(alpha, TTResult[4])
+        if TTResult[5] is not None:
+            beta = min(beta, TTResult[5])
+
+    if  d == 0:
+        return redToMoveMultiplier * countBoardValue(gs)
 
     maxScore = -townCost
     for move in possibleMoves:
@@ -133,14 +141,23 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
             maxScore = score
             if d == maxDepth:
                 nextMove[0] = move
-                print(move, score)
+                # print(move, score)
         gs.undoMove()
         # alpha = max(maxScore, alpha)
         if maxScore > alpha:
             alpha = maxScore
         if alpha >= beta:
             break
-    transpositionTable[gs.zobristKey % tableSize] = [d, maxScore, redToMoveMultiplier, nextMove[0]]
+
+    lowerBound = upperBound = None
+    if maxScore <= alpha:
+        upperbound = maxScore; 
+    if maxScore >  alpha and maxScore < beta:
+        lowerbound = maxScore
+        upperbound = maxScore
+    if maxScore >= beta: 
+        lowerbound = maxScore
+    transpositionTable[gs.zobristKey % tableSize] = [d, maxScore, redToMoveMultiplier, nextMove[0], lowerBound, upperBound]
     return maxScore
 
 # positive score better for red
