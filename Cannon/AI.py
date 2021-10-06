@@ -46,6 +46,51 @@ def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
             gs.undoMove()
         return minScore
 
+def findBestMoveMiniMaxAB(gs, possibleMoves):
+    nextMove = [None]
+    # random.shuffle(possibleMoves)
+    possibleMoves.sort()
+    alpha = -townCost*10
+    beta = townCost*10
+    findBestMoveMiniMaxABHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta)
+    return nextMove[0]
+
+def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha, beta):
+    if  d == 0:
+        return countBoardValue(gs)
+
+    if redToMove:
+        maxScore = -townCost
+        for move in possibleMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getAllPossbileMoves()
+            score = findBestMoveMiniMaxABHelper(gs, nextMoves, d - 1, False, nextMove, alpha, beta)
+            if score > maxScore:
+                maxScore = score
+                if d == maxDepth:
+                    nextMove[0] = move
+            gs.undoMove()
+            alpha = max(alpha, maxScore)
+            if beta <= alpha:
+                break
+
+        return maxScore
+    else:
+        minScore = townCost
+        for move in possibleMoves:
+            gs.makeMove(move)
+            nextMoves = gs.getAllPossbileMoves()
+            score = findBestMoveMiniMaxABHelper(gs, nextMoves, d - 1, True, nextMove, alpha, beta)
+            if score < minScore:
+                minScore = score
+                if d == maxDepth:
+                    nextMove[0] = move
+            gs.undoMove()
+            beta = min(beta, minScore)
+            if beta <= alpha:
+                break
+        return minScore
+
 def findBestMoveNegaMax(gs, possibleMoves):
     nextMove = [None]
     # random.shuffle(possibleMoves)
