@@ -113,13 +113,17 @@ def main():
             # AIMove = AI.findRandomMove(possibleMoves)
             # AIMove = AI.findBestMoveMiniMax(gs, possibleMoves)
             # AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
-            # AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
+            AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMax(gs, possibleMoves)
-            AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
+            # AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxABTT(gs, possibleMoves)
             if AIMove == None:
-                print("AIMove NONE")
-                print(gs.board)
+                # print("AIMove NONE")
+                if gs.redToMove:
+                    print("red AI moves random")
+                else:
+                    print("black AI moves random")
+                # print(gs.board)
                 AIMove = AI.findRandomMove(possibleMoves)
             gs.makeMove(AIMove)
             moveMade = True
