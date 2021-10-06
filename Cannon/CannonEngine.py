@@ -17,7 +17,28 @@ class GameState():
         ]
         
         # Black is acting stupid here
-        self.board = [['bS', 'bS', 'bS', 'bS', '--', '--', '--', '--', 'rT', '--'], ['--', '--', '--', '--', '--', '--', '--', 'bS', '--', '--'], ['bS', '--', '--', '--', '--', 'bS', '--', '--', '--', '--'], ['--', '--', 'rS', '--', '--', '--', '--', '--', '--', '--'], ['--', '--', '--', '--', 'bS', '--', 'rS', '--', '--', '--'], ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'], ['--', '--', '--', '--', '--', '--', 'bS', '--', 'rS', 'rS'], ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'], ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'], ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--']]
+        # self.board = [
+        #     ['bS', 'bS', 'bS', 'bS', '--', '--', '--', '--', 'rT', '--'],
+        #     ['--', '--', '--', '--', '--', '--', '--', 'bS', '--', '--'],
+        #     ['bS', '--', '--', '--', '--', 'bS', '--', '--', '--', '--'], 
+        #     ['--', '--', 'rS', '--', '--', '--', '--', '--', '--', '--'], 
+        #     ['--', '--', '--', '--', 'bS', '--', 'rS', '--', '--', '--'], 
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'],
+        #     ['--', '--', '--', '--', '--', '--', 'bS', '--', 'rS', 'rS'],
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'], 
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', 'rS'],
+        #     ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--']]
+        # self.board = [
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', 'rT', '--'],
+        #     ['--', '--', '--', '--', '--', '--', '--', 'bS', '--', '--'],
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'], 
+        #     ['--', '--', 'rS', '--', '--', '--', '--', '--', '--', '--'], 
+        #     ['--', '--', '--', '--', '--', '--', 'rS', '--', '--', '--'], 
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'], 
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
+        #     ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--']]
 
 
         # testboard1 = [
@@ -160,6 +181,9 @@ class GameState():
             self.moveLog.append(move)
             self.redToMove = not self.redToMove
 
+            if not self.townCapture and self.checkIfTownCaptured():
+                self.townCapture = True
+
     def undoMove(self):
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
@@ -170,11 +194,11 @@ class GameState():
                 self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.redToMove = not self.redToMove
 
-            self.townCapture = False
+            if self.townCapture and not self.checkIfTownCaptured():
+                self.townCapture = False
             self.noMoveLeft = False
 
-    def getAllPossbileMoves(self):
-        moves = []
+    def checkIfTownCaptured(self):
         townPresent = False
         for r in range(len(self.board)):
             for c in range(len(self.board[r])):
@@ -184,10 +208,13 @@ class GameState():
                         townPresent = True
 
         if not townPresent:
-            if self.redToMove:
-                self.redTownDown = True
-            else:
-                self.blackTownDown = True
+            return True
+        return False
+
+    def getAllPossbileMoves(self):
+        moves = []
+        
+        if self.checkIfTownCaptured():
             self.townCapture = True
             return moves
 
