@@ -161,15 +161,16 @@ class GameState():
 
     def makeMove(self, move):
         if self.board[move.startRow][move.startCol] != '--':
-            if move.isShoot:
-                self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[self.board[move.endRow][move.endCol]]]
-                self.board[move.endRow][move.endCol] = '--'
-            else:
-                self.zobristKey ^= self.zobristTable[move.startRow][move.startCol][self.pieceStrIndex[self.board[move.startRow][move.startCol]]]
+            if not move.isShoot:
+                if self.board[move.endRow][move.endCol] != '--':
+                    self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceCaptured]]
+                self.zobristKey ^= self.zobristTable[move.startRow][move.startCol][self.pieceStrIndex[move.pieceMoved]]
                 self.board[move.startRow][move.startCol] = '--'
                 self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceMoved]]
                 self.board[move.endRow][move.endCol] = move.pieceMoved
-            # self.zobristKey
+            else:
+                self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceCaptured]]
+                self.board[move.endRow][move.endCol] = '--'
             self.moveLog.append(move)
             self.redToMove = not self.redToMove
 
@@ -177,9 +178,14 @@ class GameState():
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
             if not move.isShoot:
+                if move.pieceCaptured != '--':
+                    self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceCaptured]]
+                self.zobristKey ^= self.zobristTable[move.startRow][move.startCol][self.pieceStrIndex[move.pieceMoved]]
                 self.board[move.startRow][move.startCol] = move.pieceMoved
+                self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceMoved]]
                 self.board[move.endRow][move.endCol] = move.pieceCaptured
             else:
+                self.zobristKey ^= self.zobristTable[move.endRow][move.endCol][self.pieceStrIndex[move.pieceCaptured]]
                 self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.redToMove = not self.redToMove
 
