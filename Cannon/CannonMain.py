@@ -40,9 +40,9 @@ def main():
     playerClicks = []
 
     redIsPerson = False
-    # blackIsPerson = False
+    blackIsPerson = False
     # redIsPerson = True
-    blackIsPerson = True
+    # blackIsPerson = True
     while runnning:
         if len(possibleMoves) == 0:
             gs.noMoveLeft = True
