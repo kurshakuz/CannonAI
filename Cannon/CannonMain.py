@@ -1,8 +1,6 @@
-import queue
 import pygame
 import CannonEngine
 import AI
-from multiprocessing import Process, Queue
 
 n = 11
 dimension = n - 1
