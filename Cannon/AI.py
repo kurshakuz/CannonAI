@@ -9,20 +9,24 @@ noPossibleMove = 0
 maxDepth = 5
 tableSize = 400
 
+
 def findRandomMove(possibleMoves):
     return possibleMoves[random.randint(0, len(possibleMoves)-1)]
+
 
 def findBestMoveMiniMax(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
     possibleMoves.sort()
-    findBestMoveMiniMaxHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove)
+    findBestMoveMiniMaxHelper(
+        gs, possibleMoves, maxDepth, gs.redToMove, nextMove)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
 
+
 def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
     nextMove[1] += 1
-    if  d == 0:
+    if d == 0:
         return countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -37,7 +41,8 @@ def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxHelper(gs, nextMoves, d - 1, False, nextMove)
+            score = findBestMoveMiniMaxHelper(
+                gs, nextMoves, d - 1, False, nextMove)
             if score > maxScore:
                 maxScore = score
                 if d == maxDepth:
@@ -50,7 +55,8 @@ def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxHelper(gs, nextMoves, d - 1, True, nextMove)
+            score = findBestMoveMiniMaxHelper(
+                gs, nextMoves, d - 1, True, nextMove)
             if score < minScore:
                 minScore = score
                 if d == maxDepth:
@@ -58,19 +64,22 @@ def findBestMoveMiniMaxHelper(gs, possibleMoves, d, redToMove, nextMove):
             gs.undoMove()
         return minScore
 
+
 def findBestMoveMiniMaxAB(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
     possibleMoves.sort()
     alpha = -townCost*10
     beta = townCost*10
-    findBestMoveMiniMaxABHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta)
+    findBestMoveMiniMaxABHelper(
+        gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
 
+
 def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha, beta):
     nextMove[1] += 1
-    if  d == 0:
+    if d == 0:
         return countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -85,7 +94,8 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxABHelper(gs, nextMoves, d - 1, False, nextMove, alpha, beta)
+            score = findBestMoveMiniMaxABHelper(
+                gs, nextMoves, d - 1, False, nextMove, alpha, beta)
             if score > maxScore:
                 maxScore = score
                 if d == maxDepth:
@@ -103,7 +113,8 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxABHelper(gs, nextMoves, d - 1, True, nextMove, alpha, beta)
+            score = findBestMoveMiniMaxABHelper(
+                gs, nextMoves, d - 1, True, nextMove, alpha, beta)
             if score < minScore:
                 minScore = score
                 if d == maxDepth:
@@ -115,6 +126,7 @@ def findBestMoveMiniMaxABHelper(gs, possibleMoves, d, redToMove, nextMove, alpha
                 break
         return minScore
 
+
 def findBestMoveMiniMaxABTT(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
@@ -122,9 +134,11 @@ def findBestMoveMiniMaxABTT(gs, possibleMoves):
     alpha = -townCost*10
     beta = townCost*10
     transpositionTable = defaultdict(list)
-    findBestMoveMiniMaxABTTHelper(gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta, transpositionTable)
+    findBestMoveMiniMaxABTTHelper(
+        gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta, transpositionTable)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
+
 
 def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alpha, beta, transpositionTable):
     nextMove[1] += 1
@@ -142,11 +156,11 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
                 alpha = max(alpha, TTResult[2])
             elif TTResult[1] == 'U':
                 beta = min(beta, TTResult[2])
-                
+
             if alpha >= beta:
                 return TTResult[2]
 
-    if  d == 0:
+    if d == 0:
         return countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -161,7 +175,8 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxABTTHelper(gs, nextMoves, d - 1, False, nextMove, alpha, beta, transpositionTable)
+            score = findBestMoveMiniMaxABTTHelper(
+                gs, nextMoves, d - 1, False, nextMove, alpha, beta, transpositionTable)
             if score > maxScore:
                 maxScore = score
                 if d == maxDepth:
@@ -190,7 +205,8 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
             gs.makeMove(move)
             nextMoves = gs.getAllPossbileMoves()
             nextMoves.sort()
-            score = findBestMoveMiniMaxABTTHelper(gs, nextMoves, d - 1, True, nextMove, alpha, beta, transpositionTable)
+            score = findBestMoveMiniMaxABTTHelper(
+                gs, nextMoves, d - 1, True, nextMove, alpha, beta, transpositionTable)
             if score < minScore:
                 minScore = score
                 if d == maxDepth:
@@ -213,20 +229,24 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
 
         return minScore
 
+
 def findBestMoveNegaMax(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
     possibleMoves.sort()
     redToMoveMultiplier = (1 if gs.redToMove else -1)
-    findBestMoveHelperNegaMax(gs, possibleMoves, maxDepth, redToMoveMultiplier, nextMove)
+    findBestMoveHelperNegaMax(
+        gs, possibleMoves, maxDepth, redToMoveMultiplier, nextMove)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
 
 # redToMoveMultiplier 1 for red
 # -1 for black
+
+
 def findBestMoveHelperNegaMax(gs, possibleMoves, d, redToMoveMultiplier, nextMove):
     nextMove[1] += 1
-    if  d == 0:
+    if d == 0:
         return redToMoveMultiplier * countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -236,7 +256,9 @@ def findBestMoveHelperNegaMax(gs, possibleMoves, d, redToMoveMultiplier, nextMov
     for move in possibleMoves:
         gs.makeMove(move)
         nextMoves = gs.getAllPossbileMoves()
-        score = -findBestMoveHelperNegaMax(gs, nextMoves, d - 1, -redToMoveMultiplier, nextMove)
+        score = - \
+            findBestMoveHelperNegaMax(
+                gs, nextMoves, d - 1, -redToMoveMultiplier, nextMove)
         if score > maxScore:
             maxScore = score
             if d == maxDepth:
@@ -244,18 +266,21 @@ def findBestMoveHelperNegaMax(gs, possibleMoves, d, redToMoveMultiplier, nextMov
         gs.undoMove()
     return maxScore
 
+
 def findBestMoveNegaMaxAB(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
     possibleMoves.sort()
     redToMoveMultiplier = (1 if gs.redToMove else -1)
-    findBestMoveHelperNegaMaxAB(gs, possibleMoves, maxDepth, -townCost, townCost, redToMoveMultiplier, nextMove)
+    findBestMoveHelperNegaMaxAB(
+        gs, possibleMoves, maxDepth, -townCost, townCost, redToMoveMultiplier, nextMove)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
 
+
 def findBestMoveHelperNegaMaxAB(gs, possibleMoves, d, alpha, beta, redToMoveMultiplier, nextMove):
     nextMove[1] += 1
-    if  d == 0:
+    if d == 0:
         return redToMoveMultiplier * countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -266,7 +291,8 @@ def findBestMoveHelperNegaMaxAB(gs, possibleMoves, d, alpha, beta, redToMoveMult
         gs.makeMove(move)
         nextMoves = gs.getAllPossbileMoves()
         nextMoves.sort()
-        score = -findBestMoveHelperNegaMaxAB(gs, nextMoves, d - 1, -beta, -alpha, -redToMoveMultiplier, nextMove)
+        score = -findBestMoveHelperNegaMaxAB(
+            gs, nextMoves, d - 1, -beta, -alpha, -redToMoveMultiplier, nextMove)
         if score > maxScore:
             maxScore = score
             if d == maxDepth:
@@ -280,15 +306,18 @@ def findBestMoveHelperNegaMaxAB(gs, possibleMoves, d, alpha, beta, redToMoveMult
             break
     return maxScore
 
+
 def findBestMoveNegaMaxABTT(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
     possibleMoves.sort()
     transpositionTable = defaultdict(list)
     redToMoveMultiplier = (1 if gs.redToMove else -1)
-    findBestMoveHelperNegaMaxABTT(gs, possibleMoves, maxDepth, -townCost, townCost, redToMoveMultiplier, nextMove, transpositionTable)
+    findBestMoveHelperNegaMaxABTT(gs, possibleMoves, maxDepth, -townCost,
+                                  townCost, redToMoveMultiplier, nextMove, transpositionTable)
     print("visited node number: ", nextMove[1])
     return nextMove[0]
+
 
 def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMultiplier, nextMove, transpositionTable):
     nextMove[1] += 1
@@ -306,11 +335,11 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
                 alpha = max(alpha, TTResult[2])
             elif TTResult[1] == 'U':
                 beta = min(beta, TTResult[2])
-                
+
             if alpha >= beta:
                 return TTResult[2]
 
-    if  d == 0:
+    if d == 0:
         return redToMoveMultiplier * countBoardValue(gs)
 
     if len(possibleMoves) == 0:
@@ -321,7 +350,8 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
         gs.makeMove(move)
         nextMoves = gs.getAllPossbileMoves()
         nextMoves.sort()
-        score = -findBestMoveHelperNegaMaxABTT(gs, nextMoves, d - 1, -beta, -alpha, -redToMoveMultiplier, nextMove, transpositionTable)
+        score = -findBestMoveHelperNegaMaxABTT(
+            gs, nextMoves, d - 1, -beta, -alpha, -redToMoveMultiplier, nextMove, transpositionTable)
         if score > maxScore:
             maxScore = score
             if d == maxDepth:
@@ -333,7 +363,7 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
             alpha = maxScore
         if alpha >= beta:
             break
-    
+
     flag = None
     TTValue = maxScore
     if maxScore <= alphaOrig:
@@ -347,6 +377,8 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
     return maxScore
 
 # positive score better for red
+
+
 def countBoardValue(gs):
     if gs.townCapture:
         if not gs.redToMove:
@@ -369,6 +401,7 @@ def countBoardValue(gs):
                 count -= soldierCost
 
     return count
+
 
 def countMaterial(board):
     count = 0

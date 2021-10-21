@@ -1,5 +1,5 @@
-from Move import Move
 from HelperFunctions import fillZobristTable, generateZobristHash
+from Move import Move
 
 class GameState():
     def __init__(self):

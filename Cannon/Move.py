@@ -1,11 +1,12 @@
 from functools import total_ordering
 
 numsToRows = {"1": 9, "2": 8, "3": 7, "4": 6, "5": 5,
-                "6": 4, "7": 3, "8": 2, "9": 1, "10": 0}
-rowsToNums = {v: k for k,v in numsToRows.items()}
+              "6": 4, "7": 3, "8": 2, "9": 1, "10": 0}
+rowsToNums = {v: k for k, v in numsToRows.items()}
 alphasToCols = {"J": 9, "I": 8, "H": 7, "G": 6, "F": 5,
                 "E": 4, "D": 3, "C": 2, "B": 1, "A": 0}
-colsToAlphas = {v: k for k,v in alphasToCols.items()}
+colsToAlphas = {v: k for k, v in alphasToCols.items()}
+
 
 @total_ordering
 class Move():
@@ -21,7 +22,8 @@ class Move():
             self.pieceMoved = None
         else:
             self.pieceMoved = board[self.startRow][self.startCol]
-        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+        self.moveID = self.startRow * 1000 + self.startCol * \
+            100 + self.endRow * 10 + self.endCol
 
     def __str__(self):
         return self.getCannonNotation()
@@ -32,7 +34,7 @@ class Move():
         else:
             return False
 
-    # movetypes = 
+    # movetypes =
     # 0: move
     # 1: retreat
     # 2: cannonmove

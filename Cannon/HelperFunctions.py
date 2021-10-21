@@ -1,7 +1,9 @@
 import uuid
 
+
 def random64():
-    return uuid.uuid4().int & (1<<64)-1
+    return uuid.uuid4().int & (1 << 64)-1
+
 
 def fillZobristTable():
     zobristTable = [[[None] * 4 for _ in range(10)] for _ in range(10)]
@@ -12,6 +14,7 @@ def fillZobristTable():
             for sideAndPiece in range(4):
                 zobristTable[row][col][sideAndPiece] = random64()
     return zobristTable
+
 
 def generateZobristHash(board, zobristTable):
     zobristKey = 0
