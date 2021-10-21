@@ -144,6 +144,9 @@ def main():
             possibleMoves = gs.getAllPossbileMoves()
             moveMade = False
             # gs.zobristLog.append(gs.zobristKey)
+            # if len(gs.zobristLog) >= 6:
+            #     if gs.zobristLog
+            gs.noMoveLeft = True
 
         drawGameState(surface, gs, font, possibleMoves, sqSelected)
 

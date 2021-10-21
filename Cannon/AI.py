@@ -6,7 +6,7 @@ import time
 soldierCost = 5
 townCost = 100
 noPossibleMove = 0
-maxDepth = 4
+maxDepth = 3
 tableSize = 400
 moveCount = [42, 42]
 
@@ -134,9 +134,11 @@ def findBestMoveMiniMaxABTT(gs, possibleMoves):
     alpha = -townCost*10
     beta = townCost*10
     transpositionTable = defaultdict(list)
+    startTime = time.time()
     findBestMoveMiniMaxABTTHelper(
         gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta, transpositionTable)
     print("visited node number: ", nextMove[1])
+    # print("elapsed time: ", time.time() - startTime)
     return nextMove[0]
 
 
