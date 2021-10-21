@@ -38,7 +38,7 @@ def main():
     moveMade = False
 
     loadImages()
-    runnning = True
+    running = True
     gameOver = False
 
     sqSelected = ()
@@ -48,7 +48,7 @@ def main():
     blackIsPerson = False
     # redIsPerson = True
     # blackIsPerson = True
-    while runnning:
+    while running:
         if len(possibleMoves) == 0:
             gs.noMoveLeft = True
         personTurn = (gs.redToMove and redIsPerson) or (
@@ -143,6 +143,7 @@ def main():
         if moveMade:
             possibleMoves = gs.getAllPossbileMoves()
             moveMade = False
+            # gs.zobristLog.append(gs.zobristKey)
 
         drawGameState(surface, gs, font, possibleMoves, sqSelected)
 

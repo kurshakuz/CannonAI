@@ -16,6 +16,19 @@ class GameState():
             ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--'],
         ]
 
+        # self.board = [
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
+        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
+        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
+        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
+        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
+        #     ['--', '--', 'rT', '--', '--', '--', 'rS', '--', '--', '--'],
+        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
+        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
+        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
+        #     ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--'],
+        # ]
+
         self.zobristTable = fillZobristTable()
         self.zobristKey = generateZobristHash(self.board, self.zobristTable)
         self.pieceStrIndex = {
@@ -24,8 +37,9 @@ class GameState():
             'rT': 2,
             'bT': 3
         }
+        self.zobristLog = []
 
-        self.redToMove = True
+        self.redToMove = False
         self.redTownDown = False
         self.blackTownDown = False
         self.townCapture = False
@@ -62,14 +76,14 @@ class GameState():
                 self.board[move.endRow][move.endCol] = move.pieceCaptured
             self.redToMove = not self.redToMove
 
-            self.townCapture = False
+            if self.townCapture and self.checkIfTownPresent():
+                self.townCapture = False
             self.noMoveLeft = False
 
-    def getAllPossbileMoves(self):
-        moves = []
+    def checkIfTownPresent(self):
         townPresent = False
-        for r in range(len(self.board)):
-            for c in range(len(self.board[r])):
+        for r in range(10):
+            for c in range(10):
                 turn = self.board[r][c][0]
                 if (turn == 'r' and self.redToMove) or (turn == 'b' and not self.redToMove):
                     if self.board[r][c][1] == 'T':
@@ -81,10 +95,17 @@ class GameState():
             else:
                 self.blackTownDown = True
             self.townCapture = True
+
+        return townPresent
+
+    def getAllPossbileMoves(self):
+        moves = []
+        
+        if self.checkIfTownPresent() == False:
             return moves
 
-        for r in range(len(self.board)):
-            for c in range(len(self.board[r])):
+        for r in range(10):
+            for c in range(10):
                 turn = self.board[r][c][0]
                 # generate soldier moves
                 if (turn == 'r' and self.redToMove) or (turn == 'b' and not self.redToMove):
