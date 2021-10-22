@@ -3,12 +3,14 @@ import random
 from collections import defaultdict
 import time
 
-soldierCost = 5
+soldierCost = 6
+# cannonShootCost = 2
 townCost = 100
 noPossibleMove = 0
-maxDepth = 4
+maxDepth = 9
 tableSize = 400
 moveCount = [42, 42]
+# cannonMoveCount = [0, 0]
 
 def findRandomMove(possibleMoves):
     return possibleMoves[random.randint(0, len(possibleMoves)-1)]
@@ -134,9 +136,14 @@ def findBestMoveMiniMaxABTT(gs, possibleMoves):
     alpha = -townCost*10
     beta = townCost*10
     transpositionTable = defaultdict(list)
-    findBestMoveMiniMaxABTTHelper(
+    runtime = time.time()
+    result = findBestMoveMiniMaxABTTHelper(
         gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta, transpositionTable)
     print("visited node number: ", nextMove[1])
+    print("time taken ", time.time() - runtime)
+    print(nextMove[0], result)
+    print("board value: ", countBoardValue(gs, gs.redToMove))
+    # print("board value opponent: ", countBoardValue(gs, not gs.redToMove))
     return nextMove[0]
 
 
@@ -160,11 +167,21 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
             if alpha >= beta:
                 return TTResult[2]
 
+    # cannonMoves = 0
+    # for move in possibleMoves:
+    #     if move.moveType == 4:
+    #         cannonMoves += 1
+
+    # if redToMove:
+    #     cannonMoveCount[0] = cannonMoves*cannonShootCost
+    # else:
+    #     cannonMoveCount[1] = cannonMoves*cannonShootCost
+
     possibleMovesNum = len(possibleMoves)
-    if redToMove:
-        moveCount[0] = possibleMovesNum
-    else:
-        moveCount[1] = possibleMovesNum
+    # if redToMove:
+    #     moveCount[0] = possibleMovesNum
+    # else:
+    #     moveCount[1] = possibleMovesNum
 
     if d == 0:
         return countBoardValue(gs, redToMove)
@@ -186,7 +203,7 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
                 maxScore = score
                 if d == maxDepth:
                     nextMove[0] = move
-                    print(move, score)
+                    # print(move, score)
             gs.undoMove()
             alpha = max(alpha, maxScore)
             if beta <= alpha:
@@ -216,7 +233,7 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
                 minScore = score
                 if d == maxDepth:
                     nextMove[0] = move
-                    print(move, score)
+                    # print(move, score)
             gs.undoMove()
             beta = min(beta, minScore)
             if beta <= alpha:
@@ -233,6 +250,81 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
         transpositionTable[gs.zobristKey % tableSize] = [d, flag, TTValue]
 
         return minScore
+
+def findBestMoveNegaMaxABTT(gs, possibleMoves):
+    nextMove = [None, 0]
+    random.shuffle(possibleMoves)
+    possibleMoves.sort()
+    transpositionTable = defaultdict(list)
+    redToMoveMultiplier = (1 if gs.redToMove else -1)
+
+    runtime = time.time()
+    result = findBestMoveHelperNegaMaxABTT(gs, possibleMoves, maxDepth, -townCost,
+        townCost, redToMoveMultiplier, nextMove, transpositionTable)
+
+    print("visited node number: ", nextMove[1])
+    print("time taken ", time.time() - runtime)
+    print(nextMove[0], result)
+    print("board value: ", countBoardValue(gs, gs.redToMove))
+    return nextMove[0]
+
+
+def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMultiplier, nextMove, transpositionTable):
+    nextMove[1] += 1
+    alphaOrig = alpha
+
+    if transpositionTable[gs.zobristKey % tableSize] != []:
+        # print(transpositionTable[gs.zobristKey % tableSize])
+        TTResult = transpositionTable[gs.zobristKey % tableSize]
+
+        # exact, lowerbound, upperbound
+        if TTResult[0] >= d:
+            if TTResult[1] == 'E':
+                return TTResult[2]
+            elif TTResult[1] == 'L':
+                alpha = max(alpha, TTResult[2])
+            elif TTResult[1] == 'U':
+                beta = min(beta, TTResult[2])
+
+            if alpha >= beta:
+                return TTResult[2]
+
+    if d == 0:
+        return redToMoveMultiplier * countBoardValue(gs, gs.redToMove)
+
+    if len(possibleMoves) == 0:
+        return -1*redToMoveMultiplier*townCost
+
+    maxScore = -townCost
+    for move in possibleMoves:
+        gs.makeMove(move)
+        nextMoves = gs.getAllPossbileMoves()
+        nextMoves.sort()
+        score = -findBestMoveHelperNegaMaxABTT(
+            gs, nextMoves, d - 1, -beta, -alpha, -redToMoveMultiplier, nextMove, transpositionTable)
+        if score > maxScore:
+            maxScore = score
+            if d == maxDepth:
+                nextMove[0] = move
+                # print(move, score)
+        gs.undoMove()
+        # alpha = max(maxScore, alpha)
+        if maxScore > alpha:
+            alpha = maxScore
+        if alpha >= beta:
+            break
+
+    flag = None
+    TTValue = maxScore
+    if maxScore <= alphaOrig:
+        flag = 'U'
+    elif maxScore >= beta:
+        flag = 'L'
+    else:
+        flag = 'E'
+
+    transpositionTable[gs.zobristKey % tableSize] = [d, flag, TTValue]
+    return maxScore
 
 # positive score better for red
 def countBoardValue(gs, redToMove):
@@ -254,8 +346,10 @@ def countBoardValue(gs, redToMove):
                 count += soldierCost
             elif gs.board[r][c][0] == 'b':
                 count -= soldierCost
-    count += moveCount[0]
-    count -= moveCount[1]
+    # count += cannonMoveCount[0]
+    # count -= cannonMoveCount[1]
+    # count += moveCount[0]
+    # count -= moveCount[1]
     return count
 
 

@@ -45,9 +45,9 @@ def main():
     playerClicks = []
 
     redIsPerson = False
-    blackIsPerson = False
+    # blackIsPerson = False
     # redIsPerson = True
-    # blackIsPerson = True
+    blackIsPerson = True
     while running:
         if len(possibleMoves) == 0:
             gs.noMoveLeft = True
@@ -119,7 +119,7 @@ def main():
                             playerClicks = [sqSelected]
 
                 # print(gs.generateZobristHash(gs.board))
-                print(gs.zobristKey)
+                # print(gs.zobristKey)
 
         if not personTurn and not gs.noMoveLeft:
             # AIMove = AI.findRandomMove(possibleMoves)
