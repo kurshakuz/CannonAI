@@ -1,7 +1,9 @@
 import pygame
 
-import AI
 import CannonEngine
+from IterativeAI import IterativeAI
+from MinimaxAI import findBestMoveMiniMax, findBestMoveMiniMaxAB, findBestMoveMiniMaxABTT
+from NegamaxAI import findBestMoveNegaMax, findBestMoveNegaMaxAB, findBestMoveNegaMaxABTT
 
 n = 11
 dimension = n - 1
@@ -29,7 +31,7 @@ def loadImages():
 
 def main():
     pygame.init()
-    font = pygame.font.SysFont('Courier', 16)
+    font = pygame.font.SysFont('Courier', 20)
     surface = pygame.display.set_mode((surface_size, surface_size))
     clock = pygame.time.Clock()
 
@@ -46,7 +48,7 @@ def main():
 
     redIsPerson = False
     blackIsPerson = False
-    # redIsPerson = True
+    redIsPerson = True
     # blackIsPerson = True
     while running:
         if len(possibleMoves) == 0:
@@ -125,10 +127,14 @@ def main():
             # AIMove = AI.findRandomMove(possibleMoves)
             # AIMove = AI.findBestMoveMiniMax(gs, possibleMoves)
             # AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
-            AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
+            # AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
+            # AIMove = AI.findBestMoveMiniMaxABTTID(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMax(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxABTT(gs, possibleMoves)
+            AIEngine = IterativeAI()
+            AIMove = AIEngine.findBestMove(gs, possibleMoves)
+
             if AIMove == None:
                 # print("AIMove NONE")
                 if gs.redToMove:

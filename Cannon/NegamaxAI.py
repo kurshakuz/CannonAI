@@ -1,3 +1,13 @@
+import random
+import time
+from collections import defaultdict
+
+from Evaluation import countBoardValue
+
+townCost = 100
+maxDepth = 2
+tableSize = 400
+
 def findBestMoveNegaMax(gs, possibleMoves):
     nextMove = [None, 0]
     random.shuffle(possibleMoves)
@@ -8,10 +18,9 @@ def findBestMoveNegaMax(gs, possibleMoves):
     print("visited node number: ", nextMove[1])
     return nextMove[0]
 
+
 # redToMoveMultiplier 1 for red
 # -1 for black
-
-
 def findBestMoveHelperNegaMax(gs, possibleMoves, d, redToMoveMultiplier, nextMove):
     nextMove[1] += 1
     if d == 0:
@@ -67,7 +76,6 @@ def findBestMoveHelperNegaMaxAB(gs, possibleMoves, d, alpha, beta, redToMoveMult
                 nextMove[0] = move
                 print(move, score)
         gs.undoMove()
-        # alpha = max(maxScore, alpha)
         if maxScore > alpha:
             alpha = maxScore
         if alpha >= beta:
@@ -92,7 +100,6 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
     alphaOrig = alpha
 
     if transpositionTable[gs.zobristKey % tableSize] != []:
-        # print(transpositionTable[gs.zobristKey % tableSize])
         TTResult = transpositionTable[gs.zobristKey % tableSize]
 
         # exact, lowerbound, upperbound
@@ -124,9 +131,7 @@ def findBestMoveHelperNegaMaxABTT(gs, possibleMoves, d, alpha, beta, redToMoveMu
             maxScore = score
             if d == maxDepth:
                 nextMove[0] = move
-                # print(move, score)
         gs.undoMove()
-        # alpha = max(maxScore, alpha)
         if maxScore > alpha:
             alpha = maxScore
         if alpha >= beta:

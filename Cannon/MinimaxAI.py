@@ -1,17 +1,13 @@
-from multiprocessing.context import DefaultContext
 import random
-from collections import defaultdict
 import time
+from collections import defaultdict
 
-soldierCost = 5
+from Evaluation import countBoardValue
+
 townCost = 100
-noPossibleMove = 0
-maxDepth = 4
+maxDepth = 2
 tableSize = 400
-moveCount = [42, 42]
-
-def findRandomMove(possibleMoves):
-    return possibleMoves[random.randint(0, len(possibleMoves)-1)]
+# moveCount = [42, 42]
 
 
 def findBestMoveMiniMax(gs, possibleMoves):
@@ -134,9 +130,11 @@ def findBestMoveMiniMaxABTT(gs, possibleMoves):
     alpha = -townCost*10
     beta = townCost*10
     transpositionTable = defaultdict(list)
+    startTime = time.time()
     findBestMoveMiniMaxABTTHelper(
         gs, possibleMoves, maxDepth, gs.redToMove, nextMove, alpha, beta, transpositionTable)
     print("visited node number: ", nextMove[1])
+    print("execution time: ", time.time() - startTime)
     return nextMove[0]
 
 
@@ -161,10 +159,10 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
                 return TTResult[2]
 
     possibleMovesNum = len(possibleMoves)
-    if redToMove:
-        moveCount[0] = possibleMovesNum
-    else:
-        moveCount[1] = possibleMovesNum
+    # if redToMove:
+    #     moveCount[0] = possibleMovesNum
+    # else:
+    #     moveCount[1] = possibleMovesNum
 
     if d == 0:
         return countBoardValue(gs, redToMove)
@@ -233,39 +231,3 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
         transpositionTable[gs.zobristKey % tableSize] = [d, flag, TTValue]
 
         return minScore
-
-# positive score better for red
-def countBoardValue(gs, redToMove):
-    if gs.townCapture:
-        if redToMove:
-            return -(townCost+1)
-        else:
-            return townCost+1
-    if gs.noMoveLeft:
-        if redToMove:
-            return -townCost
-        else:
-            return townCost
-
-    count = 0
-    for r in range(len(gs.board)):
-        for c in range(len(gs.board[r])):
-            if gs.board[r][c][0] == 'r':
-                count += soldierCost
-            elif gs.board[r][c][0] == 'b':
-                count -= soldierCost
-    count += moveCount[0]
-    count -= moveCount[1]
-    return count
-
-
-def countMaterial(board):
-    count = 0
-    for r in range(len(board)):
-        for c in range(len(board[r])):
-            if board[r][c][0] == 'r':
-                count += soldierCost
-            elif board[r][c][0] == 'b':
-                count -= soldierCost
-
-    return count

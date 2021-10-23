@@ -34,13 +34,12 @@ class Move():
         else:
             return False
 
-    # movetypes =
+    # movetypes
     # 0: move
     # 1: retreat
     # 2: cannonmove
     # 3: capture
     # 4: shoot
-
     # The strongest moves are highest numbers
     # sort to give strongest first
     def __lt__(self, other):
