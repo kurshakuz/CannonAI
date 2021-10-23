@@ -1,4 +1,4 @@
-from HelperFunctions import fillZobristTable, generateZobristHash
+from ZobristHelperFunctions import fillZobristTable, generateZobristHash
 from Move import Move
 
 class GameState():
@@ -15,19 +15,6 @@ class GameState():
             ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
             ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--'],
         ]
-
-        # self.board = [
-        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
-        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
-        #     ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
-        #     ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
-        #     ['--', '--', 'rT', '--', '--', '--', 'rS', '--', '--', '--'],
-        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
-        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
-        #     ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
-        #     ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--'],
-        # ]
 
         self.zobristTable = fillZobristTable()
         self.zobristKey = generateZobristHash(self.board, self.zobristTable)

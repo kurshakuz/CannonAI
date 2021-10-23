@@ -4,13 +4,10 @@ from collections import defaultdict
 
 from Evaluation import countBoardValue
 
-soldierCost = 5
 townCost = 100
-noPossibleMove = 0
 maxDepth = 2
-secondsPerDepth = 2.0
 tableSize = 400
-moveCount = [42, 42]
+# moveCount = [42, 42]
 
 
 def findBestMoveMiniMax(gs, possibleMoves):
@@ -162,10 +159,10 @@ def findBestMoveMiniMaxABTTHelper(gs, possibleMoves, d, redToMove, nextMove, alp
                 return TTResult[2]
 
     possibleMovesNum = len(possibleMoves)
-    if redToMove:
-        moveCount[0] = possibleMovesNum
-    else:
-        moveCount[1] = possibleMovesNum
+    # if redToMove:
+    #     moveCount[0] = possibleMovesNum
+    # else:
+    #     moveCount[1] = possibleMovesNum
 
     if d == 0:
         return countBoardValue(gs, redToMove)

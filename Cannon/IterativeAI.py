@@ -11,7 +11,7 @@ maxDepth = 10
 secondsPerDepth = 2.0
 tableSize = 400
 moveCount = [42, 42]
-timePerMove = 5
+timePerMove = 2.0
 
 
 class IterativeAI:
@@ -22,8 +22,6 @@ class IterativeAI:
         self.currentMaxDepth = 1
 
     def findBestMove(self, gs, possibleMoves):
-        self.__init__()
-
         alpha = -townCost*1.1
         beta = townCost*1.1
         transpositionTable = defaultdict(list)
@@ -32,7 +30,6 @@ class IterativeAI:
             if time.time() - startTime > timePerMove:
                 break
 
-            # possibleMoves = gs.getAllPossbileMoves()
             random.shuffle(possibleMoves)
             possibleMoves.sort()
 
@@ -48,7 +45,7 @@ class IterativeAI:
                     possibleMovesUpdated.append(move)
                 possibleMoves = possibleMovesUpdated.copy()
 
-            print("currentMaxDepth",self.currentMaxDepth)
+            print("currentMaxDepth ", self.currentMaxDepth)
             self.findBestMoveHelper(
                 gs, possibleMoves, self.currentMaxDepth, gs.redToMove, alpha, beta, transpositionTable)
 
@@ -57,7 +54,6 @@ class IterativeAI:
 
         print("execution time: ", time.time() - startTime)
         return self.nextMove
-
 
     def findBestMoveHelper(self, gs, possibleMoves, d, redToMove, alpha, beta, transpositionTable):
         alphaOrig = alpha
@@ -87,7 +83,6 @@ class IterativeAI:
             return countBoardValue(gs, redToMove)
 
         if possibleMovesNum == 0:
-            # noMoveLeft = True
             gs.noMoveLeft = True
             return countBoardValue(gs, redToMove)
 

@@ -14,13 +14,7 @@ def countBoardValue(gs, redToMove):
         else:
             return townCost
 
-    count = 0
-    for r in range(len(gs.board)):
-        for c in range(len(gs.board[r])):
-            if gs.board[r][c][0] == 'r':
-                count += soldierCost
-            elif gs.board[r][c][0] == 'b':
-                count -= soldierCost
+    count = countMaterial(gs.board)
     # count += moveCount[0]
     # count -= moveCount[1]
     return count
@@ -28,8 +22,8 @@ def countBoardValue(gs, redToMove):
 
 def countMaterial(board):
     count = 0
-    for r in range(len(board)):
-        for c in range(len(board[r])):
+    for r in range(10):
+        for c in range(10):
             if board[r][c][0] == 'r':
                 count += soldierCost
             elif board[r][c][0] == 'b':
