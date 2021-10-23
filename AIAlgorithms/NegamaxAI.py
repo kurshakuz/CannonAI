@@ -1,10 +1,7 @@
 import random
 from collections import defaultdict
 
-from AIAlgorithms.Evaluation import countBoardValue
-
-townCost = 100
-tableSize = 400
+from AIAlgorithms.Evaluation import countBoardValue, townCost, tableSize
 
 
 class Negamax:

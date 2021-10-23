@@ -2,21 +2,20 @@ import random
 import time
 from collections import defaultdict
 
-from AIAlgorithms.Evaluation import countBoardValue
-
-townCost = 100
-tableSize = 400
-moveCount = [42, 42]
+from AIAlgorithms.Evaluation import (countBoardValue,
+                                     countBoardValueWithCannonShootCount,
+                                     countBoardValueWithMobility, tableSize,
+                                     townCost)
 
 
 class IterativeAI:
     def __init__(self, maxTime):
-        self.moveFromPreviousIteration = None
-        self.previousIterationFinished = False
         self.nextMove = None
         self.currentMaxDepth = 1
         self.maxDepth = 10
         self.timePerMove = maxTime
+        self.moveCount = [42, 42]
+        self.cannonShootCount = [0, 0]
 
     def findBestMove(self, gs, possibleMoves):
         alpha = -townCost*1.1
@@ -71,17 +70,37 @@ class IterativeAI:
                     return TTResult[2]
 
         possibleMovesNum = len(possibleMoves)
+
+        # cannon move number list to use for evaluation function
+        cannonMoves = 0
+        for move in possibleMoves:
+            if move.moveType == 4:
+                cannonMoves += 1
+
         if redToMove:
-            moveCount[0] = possibleMovesNum
+            self.cannonShootCount[0] = cannonMoves
         else:
-            moveCount[1] = possibleMovesNum
+            self.cannonShootCount[1] = cannonMoves
+
+        # total possible number of move possible for each side
+        # mobility heuristics
+        if redToMove:
+            self.moveCount[0] = possibleMovesNum
+        else:
+            self.moveCount[1] = possibleMovesNum
 
         if d == 0:
-            return countBoardValue(gs, redToMove)
+            value = countBoardValue(gs, redToMove)
+            # value = countBoardValueWithMobility(gs, redToMove, self.moveCount)
+            # value = countBoardValueWithCannonShootCount(gs, redToMove, self.cannonShootCount)
+            return value
 
         if possibleMovesNum == 0:
             gs.noMoveLeft = True
-            return countBoardValue(gs, redToMove)
+            value = countBoardValue(gs, redToMove)
+            # value = countBoardValueWithMobility(gs, redToMove, self.moveCount)
+            # value = countBoardValueWithCannonShootCount(gs, redToMove, self.cannonShootCount)
+            return value
 
         if redToMove:
             maxScore = -townCost

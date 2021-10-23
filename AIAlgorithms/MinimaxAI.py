@@ -2,11 +2,8 @@ import random
 import time
 from collections import defaultdict
 
-from AIAlgorithms.Evaluation import countBoardValue
+from AIAlgorithms.Evaluation import countBoardValue, townCost, tableSize
 
-townCost = 100
-tableSize = 400
-# moveCount = [42, 42]
 
 class Minimax:
     def __init__(self, maxDepth=2):
