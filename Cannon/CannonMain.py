@@ -1,7 +1,7 @@
 import pygame
 
-import AI
 import CannonEngine
+from IterativeAI import IterativeAI
 
 n = 11
 dimension = n - 1
@@ -48,6 +48,7 @@ def main():
     blackIsPerson = False
     redIsPerson = True
     # blackIsPerson = True
+    AIEngine = IterativeAI()
     while running:
         if len(possibleMoves) == 0:
             gs.noMoveLeft = True
@@ -126,10 +127,13 @@ def main():
             # AIMove = AI.findBestMoveMiniMax(gs, possibleMoves)
             # AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
             # AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
-            AIMove = AI.findBestMoveMiniMaxABTTID(gs, possibleMoves)
+            # AIMove = AI.findBestMoveMiniMaxABTTID(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMax(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
             # AIMove = AI.findBestMoveNegaMaxABTT(gs, possibleMoves)
+
+            AIMove = AIEngine.findBestMove(gs, possibleMoves)
+
             if AIMove == None:
                 # print("AIMove NONE")
                 if gs.redToMove:
