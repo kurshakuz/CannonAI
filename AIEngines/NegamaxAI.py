@@ -2,7 +2,7 @@ import random
 import time
 from collections import defaultdict
 
-from Evaluation import countBoardValue
+from AIEngines.Evaluation import countBoardValue
 
 townCost = 100
 maxDepth = 2

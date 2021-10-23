@@ -2,7 +2,7 @@ import random
 import time
 from collections import defaultdict
 
-from Evaluation import countBoardValue
+from AIEngines.Evaluation import countBoardValue
 
 soldierCost = 5
 townCost = 100

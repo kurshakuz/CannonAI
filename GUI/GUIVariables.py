@@ -1,0 +1,10 @@
+n = 11
+dimension = n - 1
+surface_size = 800
+square_size = surface_size // n
+surface_size = n * square_size
+display_offset = 50
+max_fps = 15
+colors = [(244, 164, 96), (139, 69, 19), (255, 255, 255), (0, 0, 0)]
+row_names = ['', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']
+col_names = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
