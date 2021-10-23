@@ -1,12 +1,10 @@
 import pygame
 
-from AIEngines.IterativeAI import IterativeAI
-from AIEngines.MinimaxAI import (findBestMoveMiniMax, findBestMoveMiniMaxAB,
-                                 findBestMoveMiniMaxABTT)
-from AIEngines.NegamaxAI import (findBestMoveNegaMax, findBestMoveNegaMaxAB,
-                                 findBestMoveNegaMaxABTT)
-from AIEngines.RandomAI import findRandomMove
-from Engine import CannonEngine
+from AIAlgorithms.IterativeAI import IterativeAI
+from AIAlgorithms.MinimaxAI import Minimax, MinimaxAB, MinimaxABTT
+from AIAlgorithms.NegamaxAI import Negamax, NegamaxAB, NegamaxABTT
+from AIAlgorithms.RandomAI import findRandomMove
+from GameEngine import CannonEngine
 from GUI.GUIHelperFunctions import drawGameState, drawText, loadImages
 from GUI.GUIVariables import max_fps, square_size, surface_size
 
@@ -104,18 +102,20 @@ def main():
 
         if not personTurn and not gs.noMoveLeft:
             # AIMove = AI.findRandomMove(possibleMoves)
-            # AIMove = AI.findBestMoveMiniMax(gs, possibleMoves)
-            # AIMove = AI.findBestMoveMiniMaxAB(gs, possibleMoves)
-            # AIMove = AI.findBestMoveMiniMaxABTT(gs, possibleMoves)
-            # AIMove = AI.findBestMoveMiniMaxABTTID(gs, possibleMoves)
-            # AIMove = AI.findBestMoveNegaMax(gs, possibleMoves)
-            # AIMove = AI.findBestMoveNegaMaxAB(gs, possibleMoves)
-            # AIMove = AI.findBestMoveNegaMaxABTT(gs, possibleMoves)
-            AIEngine = IterativeAI()
+            
+            maxDepth = 3
+            maxTime = 3.0
+
+            # AIEngine = Minimax(maxDepth)
+            # AIEngine = MinimaxAB(maxDepth)
+            # AIEngine = MinimaxABTT(maxDepth)
+            # AIEngine = Negamax(maxDepth)
+            # AIEngine = NegamaxAB(maxDepth)
+            # AIEngine = NegamaxABTT(maxDepth)
+            AIEngine = IterativeAI(maxTime)
             AIMove = AIEngine.findBestMove(gs, possibleMoves)
 
             if AIMove == None:
-                # print("AIMove NONE")
                 if gs.redToMove:
                     print("red AI moves random")
                 else:

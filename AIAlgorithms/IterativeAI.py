@@ -2,32 +2,29 @@ import random
 import time
 from collections import defaultdict
 
-from AIEngines.Evaluation import countBoardValue
+from AIAlgorithms.Evaluation import countBoardValue
 
-soldierCost = 5
 townCost = 100
-noPossibleMove = 0
-maxDepth = 10
-secondsPerDepth = 2.0
 tableSize = 400
 moveCount = [42, 42]
-timePerMove = 2.0
 
 
 class IterativeAI:
-    def __init__(self):
+    def __init__(self, maxTime):
         self.moveFromPreviousIteration = None
         self.previousIterationFinished = False
         self.nextMove = None
         self.currentMaxDepth = 1
+        self.maxDepth = 10
+        self.timePerMove = maxTime
 
     def findBestMove(self, gs, possibleMoves):
         alpha = -townCost*1.1
         beta = townCost*1.1
         transpositionTable = defaultdict(list)
         startTime = time.time()
-        while self.currentMaxDepth < maxDepth+1:
-            if time.time() - startTime > timePerMove:
+        while self.currentMaxDepth < self.maxDepth+1:
+            if time.time() - startTime > self.timePerMove:
                 break
 
             random.shuffle(possibleMoves)

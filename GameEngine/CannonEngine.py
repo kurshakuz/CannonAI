@@ -1,5 +1,5 @@
-from Engine.Move import Move
-from Engine.ZobristHelperFunctions import fillZobristTable, generateZobristHash
+from GameEngine.Move import Move
+from GameEngine.ZobristHelperFunctions import fillZobristTable, generateZobristHash
 
 
 class GameState():
