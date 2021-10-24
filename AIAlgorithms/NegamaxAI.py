@@ -1,7 +1,8 @@
 import random
+import time
 from collections import defaultdict
 
-from AIAlgorithms.Evaluation import countBoardValue, townCost, tableSize
+from AIAlgorithms.Evaluation import countBoardValue, tableSize, townCost
 
 
 class Negamax:
@@ -14,9 +15,11 @@ class Negamax:
         random.shuffle(possibleMoves)
         possibleMoves.sort()
         redToMoveMultiplier = (1 if gs.redToMove else -1)
+        startTime = time.time()
         self.findBestMoveHelper(
             gs, possibleMoves, self.maxDepth, redToMoveMultiplier)
         print("visited node number: ", self.nodeVisitCount)
+        print("execution time: ", time.time() - startTime)
         return self.nextMove
 
     # redToMoveMultiplier 1 for red
@@ -27,6 +30,7 @@ class Negamax:
             return redToMoveMultiplier * countBoardValue(gs, (True if 1 else False))
 
         if len(possibleMoves) == 0:
+            gs.noMoveLeft = True
             return countBoardValue(gs, (True if 1 else False))
 
         maxScore = -townCost
@@ -53,9 +57,11 @@ class NegamaxAB:
         random.shuffle(possibleMoves)
         possibleMoves.sort()
         redToMoveMultiplier = (1 if gs.redToMove else -1)
+        startTime = time.time()
         self.findBestMoveHelper(
             gs, possibleMoves, self.maxDepth, -townCost, townCost, redToMoveMultiplier)
         print("visited node number: ", self.nodeVisitCount)
+        print("execution time: ", time.time() - startTime)
         return self.nextMove
 
     def findBestMoveHelper(self, gs, possibleMoves, d, alpha, beta, redToMoveMultiplier):
@@ -64,6 +70,7 @@ class NegamaxAB:
             return redToMoveMultiplier * countBoardValue(gs, (True if 1 else False))
 
         if len(possibleMoves) == 0:
+            gs.noMoveLeft = True
             return countBoardValue(gs, (True if 1 else False))
 
         maxScore = -townCost
@@ -96,9 +103,11 @@ class NegamaxABTT:
         random.shuffle(possibleMoves)
         possibleMoves.sort()
         redToMoveMultiplier = (1 if gs.redToMove else -1)
+        startTime = time.time()
         self.findBestMoveHelper(gs, possibleMoves, self.maxDepth, -townCost,
                                 townCost, redToMoveMultiplier)
         print("visited node number: ", self.nodeVisitCount)
+        print("execution time: ", time.time() - startTime)
         return self.nextMove
 
     def findBestMoveHelper(self, gs, possibleMoves, d, alpha, beta, redToMoveMultiplier):
@@ -124,6 +133,7 @@ class NegamaxABTT:
             return redToMoveMultiplier * countBoardValue(gs, (True if 1 else False))
 
         if len(possibleMoves) == 0:
+            gs.noMoveLeft = True
             return countBoardValue(gs, (True if 1 else False))
 
         maxScore = -townCost

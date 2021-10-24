@@ -2,7 +2,7 @@ import random
 import time
 from collections import defaultdict
 
-from AIAlgorithms.Evaluation import countBoardValue, townCost, tableSize
+from AIAlgorithms.Evaluation import countBoardValue, tableSize, townCost
 
 
 class Minimax:
@@ -14,9 +14,11 @@ class Minimax:
     def findBestMove(self, gs, possibleMoves):
         random.shuffle(possibleMoves)
         possibleMoves.sort()
+        startTime = time.time()
         self.findBestMoveHelper(
             gs, possibleMoves, self.maxDepth, gs.redToMove)
         print("visited node number: ", self.nodeVisitCount)
+        print("execution time: ", time.time() - startTime)
         return self.nextMove
 
     def findBestMoveHelper(self, gs, possibleMoves, d, redToMove):
@@ -70,9 +72,11 @@ class MinimaxAB:
         possibleMoves.sort()
         alpha = -townCost*10
         beta = townCost*10
+        startTime = time.time()
         self.findBestMoveHelper(
             gs, possibleMoves, self.maxDepth, gs.redToMove, alpha, beta)
         print("visited node number: ", self.nodeVisitCount)
+        print("execution time: ", time.time() - startTime)
         return self.nextMove
 
     def findBestMoveHelper(self, gs, possibleMoves, d, redToMove, alpha, beta):
@@ -162,10 +166,6 @@ class MinimaxABTT:
                     return TTResult[2]
 
         possibleMovesNum = len(possibleMoves)
-        # if redToMove:
-        #     moveCount[0] = possibleMovesNum
-        # else:
-        #     moveCount[1] = possibleMovesNum
 
         if d == 0:
             return countBoardValue(gs, redToMove)

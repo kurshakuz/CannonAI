@@ -104,7 +104,7 @@ def main():
             # AIMove = AI.findRandomMove(possibleMoves)
             
             maxDepth = 3
-            maxTime = 3.0
+            maxTime = 5.0
 
             # AIEngine = Minimax(maxDepth)
             # AIEngine = MinimaxAB(maxDepth)

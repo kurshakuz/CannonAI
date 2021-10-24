@@ -1,3 +1,5 @@
+import random
+
 from GameEngine.Move import Move
 from GameEngine.ZobristHelperFunctions import fillZobristTable, generateZobristHash
 
@@ -5,7 +7,7 @@ from GameEngine.ZobristHelperFunctions import fillZobristTable, generateZobristH
 class GameState():
     def __init__(self):
         self.board = [
-            ['--', '--', '--', '--', '--', '--', '--', '--', 'rT', '--'],
+            ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
             ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
             ['--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS', '--', 'rS'],
@@ -14,8 +16,13 @@ class GameState():
             ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
             ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
             ['bS', '--', 'bS', '--', 'bS', '--', 'bS', '--', 'bS', '--'],
-            ['--', 'bT', '--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', '--', '--', '--', '--', '--', '--', '--', '--'],
         ]
+
+        redTownLoc = random.randint(0, 9)
+        blackTownLoc = random.randint(0, 9)
+        self.board[0][redTownLoc] = 'rT'
+        self.board[9][blackTownLoc] = 'bT'
 
         self.zobristTable = fillZobristTable()
         self.zobristKey = generateZobristHash(self.board, self.zobristTable)
@@ -25,7 +32,6 @@ class GameState():
             'rT': 2,
             'bT': 3
         }
-        self.zobristLog = []
 
         self.redToMove = False
         self.redTownDown = False
