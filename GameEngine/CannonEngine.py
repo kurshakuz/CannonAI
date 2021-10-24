@@ -107,6 +107,8 @@ class GameState():
                         self.getSoldierMoves(r, c, moves)
         return moves
 
+    # the moves are pseudo-ordered to
+    # improve sorting speed
     def getSoldierMoves(self, r, c, moves):
         if self.redToMove:
             player = 'r'

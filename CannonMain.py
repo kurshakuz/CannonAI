@@ -29,8 +29,8 @@ def main():
     redIsPerson = False
     # redIsPerson = True
 
-    # blackIsPerson = False
-    blackIsPerson = True
+    blackIsPerson = False
+    # blackIsPerson = True
     while running:
         if len(possibleMoves) == 0:
             gs.noMoveLeft = True
@@ -104,15 +104,15 @@ def main():
             # AIMove = AI.findRandomMove(possibleMoves)
             
             maxDepth = 3
-            maxTime = 5.0
+            maxTime = 1.0
 
             # AIEngine = Minimax(maxDepth)
             # AIEngine = MinimaxAB(maxDepth)
-            # AIEngine = MinimaxABTT(maxDepth)
+            AIEngine = MinimaxABTT(maxDepth)
             # AIEngine = Negamax(maxDepth)
             # AIEngine = NegamaxAB(maxDepth)
             # AIEngine = NegamaxABTT(maxDepth)
-            AIEngine = IterativeAI(maxTime)
+            # AIEngine = IterativeAI(maxTime)
             AIMove = AIEngine.findBestMove(gs, possibleMoves)
 
             if AIMove == None:
