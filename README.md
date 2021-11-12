@@ -1,5 +1,19 @@
 # Cannon game
 
+This is a game GUI engine for Cannon board game developed using Python and pygame.
+Cannon is a two-player board game invented in 2003 by David E. Whitcher.
+Rules and visuals are available [here](https://www.iggamecenter.com/info/en/cannon.html).
+
+This game engine contains a various number of AI implementations to play against a human player.
+Following AI engines with enhancement were developed:
+* Random player AI
+* Vanilla MiniMax
+* Vanilla NegaMax
+* MiniMax with Alpha Beta pruning
+* NegaMax with Alpha Beta pruning
+* Transposition table for alpha beta algorithm using Zobrist hasing
+* Variable depth search with time constraints
+
 ## Requirements
 
 ```
